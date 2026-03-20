@@ -1,0 +1,36 @@
+.container_login {
+  background-image:
+    linear-gradient(rgba(151, 151, 151, 0.4), rgba(127, 127, 127, 0.4)),
+    url(../assets/background_login.avif);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.login-card {
+  width: 520px;
+  border-radius: 14px;
+}
+
+.end-line {
+  margin-top: 20px;
+  border-top: 0.5px solid rgb(155, 155, 155);
+  text-align: center;
+  padding-top: 20px;
+}
+
+.margin_top {
+  margin-top: 12px;
+}
+
+.link-derection {
+  text-decoration: none;
+  align-items: center;
+}
+
+@media (max-width: 576px) {
+  .login-card {
+    width: 350px;
+  }
+}
