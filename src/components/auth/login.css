@@ -34,3 +34,8 @@
     width: 350px;
   }
 }
+
+.warning-login {
+  display: none;
+  color: red;
+}

@@ -5,3 +5,20 @@
 .bg-body-tertiary {
   align-items: center;
 }
+
+.admin-container {
+  display: flex;
+}
+
+.admin-content {
+  width: 100%;
+}
+
+.admin-main {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.header {
+  border: 1px solid black;
+}

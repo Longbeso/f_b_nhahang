@@ -1,18 +1,28 @@
 import { Form, Button, Card, Container } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import AuthService from "../../services/AuthService";
 import "./login.css";
 const Login = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [passWord, setPassWord] = useState("");
-
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(userName);
-    console.log(passWord);
-    navigate("/waiter");
+    const result: any = await AuthService.login({ userName, passWord });
+    if (result.error) {
+      const pElement = document.querySelector(".warning-login");
+      if (pElement && pElement instanceof HTMLParagraphElement) {
+        pElement.textContent = "userName or passWord is wrong";
+        pElement.style.display = "block";
+      }
+    }
+    localStorage.setItem("accessToken", result.accessToken);
+    if (result.infor.role === "ADMIN") {
+      navigate("/admin");
+    } else {
+      navigate("/waiter");
+    }
   };
 
   return (
@@ -34,6 +44,7 @@ const Login = () => {
                   setUserName(e.target.value);
                 }}
               />
+              <p className="warning-login">asdafdd</p>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Mật khẩu</Form.Label>

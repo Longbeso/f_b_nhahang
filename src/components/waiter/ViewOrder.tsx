@@ -30,6 +30,7 @@ interface MenuItem {
 const ViewOrder = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [quantities, setQuantities] = useState<Record<number, number>>({}); // menu_item_id -> quantity
+  const [total, setTotal] = useState<number>(0); // menu_item_id -> quantity
 
   const handleClickCategory = (id: number) => {
     setSelectedCategory(id);
@@ -43,6 +44,8 @@ const ViewOrder = () => {
       ...prev,
       [id]: (prev[id] || 0) + 1,
     }));
+    const foundItem = menu.find((item) => item.id === id);
+    setTotal(total + (foundItem?.price || 0));
   };
 
   // [id] khi chuyển qua js thì id vẫn là number
@@ -61,6 +64,8 @@ const ViewOrder = () => {
 
       return { ...prev, [id]: newQty };
     });
+    const foundItem = menu.find((item) => item.id === id);
+    setTotal(total - (foundItem?.price || 0));
   };
 
   const categories: Category[] = [
@@ -336,15 +341,9 @@ const ViewOrder = () => {
                           <Card.Body>
                             <Card.Title>{item.name}</Card.Title>
                             <Card.Text>{item.description}</Card.Text>
+                            <Card.Text>{item.price}</Card.Text>
+
                             <div className="order-button-wrap">
-                              <Button
-                                variant="primary"
-                                onClick={() => {
-                                  console.log(quantities);
-                                }}
-                              >
-                                Thêm món
-                              </Button>
                               <Counter
                                 item={item}
                                 quantity={quantities[item.id] || 0}
@@ -365,33 +364,39 @@ const ViewOrder = () => {
               <div className="order-cart">
                 <p className="cart-tittle">Đơn đặt món hiện tại</p>
                 <div className="cart-container">
-                  {cartOrder.map((dish) => {
-                    return (
-                      <Col xs="auto" key={dish.id} className="mb-3">
-                        <Card className="cart-card">
-                          <Card.Body>
-                            <div className="cart-card-container">
-                              <div className="card-container">
-                                <Card.Title>{dish.name}</Card.Title>
-                                <Card.Subtitle className=" text-muted mt-2 mb-2">
-                                  {dish.price}
-                                </Card.Subtitle>
-                                <Counter
-                                  item={dish}
-                                  quantity={quantities[dish.id] || 0}
-                                  handleClickAdd={handleClickAdd}
-                                  handleClickSub={handleClickSub}
-                                />
-                              </div>
-                              <div className="delete-icon">
-                                <RiDeleteBin5Line />
-                              </div>
-                            </div>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    );
-                  })}
+                  {cartOrder.length === 0
+                    ? "Không có đơn hàng nào"
+                    : cartOrder.map((dish) => {
+                        return (
+                          <Col xs="auto" key={dish.id} className="mb-3">
+                            <Card className="cart-card">
+                              <Card.Body>
+                                <div className="cart-card-container">
+                                  <div className="card-container">
+                                    <Card.Title>{dish.name}</Card.Title>
+                                    <Card.Subtitle className=" text-muted mt-2 mb-2">
+                                      {dish.price}
+                                    </Card.Subtitle>
+                                    <Counter
+                                      item={dish}
+                                      quantity={quantities[dish.id] || 0}
+                                      handleClickAdd={handleClickAdd}
+                                      handleClickSub={handleClickSub}
+                                    />
+                                  </div>
+                                  <div className="delete-icon">
+                                    <RiDeleteBin5Line />
+                                  </div>
+                                </div>
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                        );
+                      })}
+                </div>
+                <div className="cart-submit">
+                  <p>Total: {total}</p>
+                  <Button className="w-100">xác nhận gọi món</Button>
                 </div>
               </div>
             </Col>
