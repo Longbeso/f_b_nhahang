@@ -10,4 +10,12 @@ const getAllDish = async () => {
   return await axios.get("dish");
 };
 
-export default { getAllDish, getAllCategory };
+const getDishByCategoryId = async (id: number) => {
+  return await axios.get(`dish/category/${id}`);
+};
+
+export default {
+  getAllDish,
+  getAllCategory,
+  getDishByCategoryId,
+};

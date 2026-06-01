@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import menuService from "../../services/MenuService";
 import type { dishDTO } from "./dto/Dish.dto";
 import Card from "./Card";
@@ -6,9 +6,14 @@ import "./menu.css";
 const Menu = () => {
   const [dishes, setDishes] = useState([]);
   const [categorys, setCategorys] = useState([]);
-
+  // const [modal, setModal] = useState<boolean>(false);
   const fetchDish = async () => {
     const listDish = await menuService.getAllDish();
+    setDishes(listDish.data);
+  };
+
+  const fetchDishByCategoryId = async (id: number) => {
+    const listDish = await menuService.getDishByCategoryId(id);
     setDishes(listDish.data);
   };
 
@@ -24,24 +29,52 @@ const Menu = () => {
 
   useEffect(() => {
     console.log(dishes);
-  }, [dishes]);
+  });
 
-  useEffect(() => {
-    console.log(categorys);
-  }, [categorys]);
+  const handleClickCategory = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    categoryId: number,
+  ) => {
+    const listBtn = document.querySelectorAll(".category-btn");
+    listBtn.forEach((btn) => {
+      if (btn.classList.contains("btn-primary")) {
+        btn.classList.remove("btn-primary");
+      }
+    });
+    e.currentTarget.classList.add("btn-primary");
+    if (categoryId === 0) {
+      fetchDish();
+    } else {
+      fetchDishByCategoryId(categoryId);
+    }
+  };
 
   return (
     <div className="menu-container">
       <div className="category">
-        <button className="btn btn-primary">All</button>
+        <button
+          className="btn category-btn btn-primary"
+          onClick={(e) => {
+            handleClickCategory(e, 0);
+          }}
+        >
+          All
+        </button>
         {categorys.map((category: any) => {
           return (
-            <div key={category.id}>
-              <button className="btn">{category.name}</button>
-            </div>
+            <button
+              className="btn category-btn"
+              onClick={(e) => {
+                handleClickCategory(e, category.id);
+              }}
+              key={category.id}
+            >
+              {category.name}
+            </button>
           );
         })}
       </div>
+      <div className="modal-create-dish">{/* làm modal thêm món */}</div>
       <div className="menu-main container">
         <div className="row">
           {dishes.map((dish: dishDTO) => {

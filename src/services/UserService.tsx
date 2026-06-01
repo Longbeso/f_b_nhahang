@@ -11,4 +11,29 @@ const getAllUser = async () => {
   return users;
 };
 
-export default { createUser, getAllUser };
+const softDeleteUser = (id: number) => {
+  return axios.delete(`user/${id}`);
+};
+
+const getUserDeleted = () => {
+  return axios.get("user/deleted");
+};
+
+const restoreUser = (id: number) => {
+  return axios.post(`user/${id}/restore`);
+};
+
+// profile
+
+const getUserProfile = (userId: number) => {
+  return axios.get(`user/${userId}/staffProfile`);
+};
+
+export default {
+  createUser,
+  getAllUser,
+  softDeleteUser,
+  getUserDeleted,
+  restoreUser,
+  getUserProfile,
+};

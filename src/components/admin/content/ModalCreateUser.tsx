@@ -2,6 +2,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
+import "./CRUDUser.css";
 import UserService from "../../../services/UserService";
 const ModalCreateUser = (prov: any) => {
   const { modal, setModal, fetchUser } = prov;
@@ -28,7 +29,43 @@ const ModalCreateUser = (prov: any) => {
   };
 
   const handleSelectRole = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRole(e.target.value);
+    const pSelectRoleWarning = document.querySelector(".warning-select-role");
+    if (e.target.value === "select role for user") {
+      if (
+        pSelectRoleWarning &&
+        pSelectRoleWarning instanceof HTMLParagraphElement
+      ) {
+        pSelectRoleWarning.style.display = "block";
+      }
+    } else {
+      if (
+        pSelectRoleWarning &&
+        pSelectRoleWarning instanceof HTMLParagraphElement
+      ) {
+        pSelectRoleWarning.style.display = "none";
+      }
+      setRole(e.target.value);
+    }
+  };
+
+  const handleBlurPassword = () => {
+    const pPassWordWarning = document.querySelector(".warning-enter-password");
+    if (passWord.length < 8) {
+      if (
+        pPassWordWarning &&
+        pPassWordWarning instanceof HTMLParagraphElement
+      ) {
+        pPassWordWarning.style.display = "block";
+      }
+      // thêm cái toast để thông báo nếu cái trên lỗi
+    } else {
+      if (
+        pPassWordWarning &&
+        pPassWordWarning instanceof HTMLParagraphElement
+      ) {
+        pPassWordWarning.style.display = "none";
+      }
+    }
   };
 
   return (
@@ -40,7 +77,7 @@ const ModalCreateUser = (prov: any) => {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="formGroupEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>UserName</Form.Label>
               <Form.Control
                 placeholder="Enter UserName"
                 name="userName"
@@ -49,6 +86,7 @@ const ModalCreateUser = (prov: any) => {
                   setUserName(e.target.value);
                 }}
               />
+              <p className="warning-enter-username"></p>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupPassword">
               <Form.Label>Password</Form.Label>
@@ -60,13 +98,21 @@ const ModalCreateUser = (prov: any) => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setPassWord(e.target.value);
                 }}
+                onBlur={() => {
+                  handleBlurPassword();
+                }}
               />
+              <p className="warning-enter-password">
+                passWord must be have more 8 character
+              </p>
             </Form.Group>
-            <Form.Select aria-label="select role" onChange={handleSelectRole}>
+            <Form.Select aria-label="select role" onBlur={handleSelectRole}>
               <option>select role for user</option>
               <option value="WAITER">Waiter</option>
               <option value="CHEF">Chef</option>
+              <option value="ADMIN">ADMIN</option>
             </Form.Select>
+            <p className="warning-select-role">select role please</p>
           </Form>
         </Modal.Body>
         <Modal.Footer>

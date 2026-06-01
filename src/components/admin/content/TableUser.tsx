@@ -1,7 +1,57 @@
 import Table from "react-bootstrap/Table";
 import type { User } from "../../../types/user.type";
+import "./manageUser.css";
 const TableUser = (prov: any) => {
-  const { listUser } = prov;
+  const {
+    listUser,
+    handleClickDeleteUser,
+    listUserDeleted,
+    modal,
+    handleClickRestoreUser,
+    handleClickUserDetail,
+  } = prov;
+
+  const showListUser = (user: User) => {
+    return (
+      <tr key={user.id}>
+        <td>{user.id}</td>
+        <td>{user.userName}</td>
+        <td>{user.role}</td>
+        <td>
+          {modal.delete === false ? (
+            <>
+              <button
+                className="btn btn-danger"
+                onClick={() => {
+                  handleClickDeleteUser(user.id);
+                }}
+              >
+                Delete
+              </button>
+              <button
+                className="btn btn-info margin-button"
+                onClick={() => {
+                  handleClickUserDetail(user.id);
+                }}
+              >
+                Thông tin chi tiết
+              </button>
+            </>
+          ) : (
+            <button
+              className="btn btn-success"
+              onClick={() => {
+                handleClickRestoreUser(user.id);
+              }}
+            >
+              Restore
+            </button>
+          )}
+        </td>
+      </tr>
+    );
+  };
+
   return (
     <Table striped bordered hover>
       <thead>
@@ -12,15 +62,13 @@ const TableUser = (prov: any) => {
         </tr>
       </thead>
       <tbody>
-        {listUser.map((user: User) => {
-          return (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.userName}</td>
-              <td>{user.role}</td>
-            </tr>
-          );
-        })}
+        {modal.delete === false
+          ? listUser.map((user: User) => {
+              return showListUser(user);
+            })
+          : listUserDeleted.map((user: User) => {
+              return showListUser(user);
+            })}
       </tbody>
     </Table>
   );

@@ -1,0 +1,6 @@
+.warning-select-role,
+.warning-enter-username,
+.warning-enter-password {
+  color: red;
+  display: none;
+}
