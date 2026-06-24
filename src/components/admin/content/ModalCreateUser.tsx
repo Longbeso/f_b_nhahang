@@ -9,6 +9,10 @@ const ModalCreateUser = (prov: any) => {
   const [userName, setUserName] = useState("");
   const [passWord, setPassWord] = useState("");
   const [role, setRole] = useState("");
+
+  // sửa lại chỗ đặt hàm handle ==> đưa qua component cha
+  // đưa các hàm xử lý qua component cha
+
   const handleClose = () => {
     setModal((prev: any) => ({
       ...prev,

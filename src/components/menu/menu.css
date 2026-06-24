@@ -7,3 +7,61 @@
   margin: 0 4px;
   border: solid 1px rgb(109, 109, 109) !important;
 }
+
+/* card food */
+.card-food {
+  min-height: 340px;
+}
+
+/* menu */
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+/* modal add new dish */
+
+.dish-variant-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dish-variant-form {
+  background-color: rgba(215, 215, 215, 0.5);
+  padding: 6px;
+  flex: 1;
+  margin-right: 4px;
+}
+
+.delete-btn-dish-variant {
+  height: 50%;
+}
+
+.list-dish-variant {
+  height: 240px;
+  overflow: scroll;
+}
+
+.header-dish-variant {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.wrapping-img-preview {
+  height: 300px;
+  width: 100%;
+  border: 1px dashed black;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.img-preview {
+  height: 100%;
+
+  object-fit: contain;
+}

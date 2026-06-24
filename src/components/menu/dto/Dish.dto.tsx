@@ -1,9 +1,9 @@
-import type { dishVariantDTO } from "./dishVariant.dto";
+import type { dishVariantDTO } from "./DishVariant.dto";
 
 export type dishDTO = {
   id: number;
   imageUrl: string;
   name: string;
   description: string;
-  dishVariant: dishVariantDTO[];
+  dishVariants: dishVariantDTO[];
 };

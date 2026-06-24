@@ -23,7 +23,12 @@ const TableUser = (prov: any) => {
               <button
                 className="btn btn-danger"
                 onClick={() => {
-                  handleClickDeleteUser(user.id);
+                  const result = confirm(
+                    "Bạn có chắc muốn xóa người dùng này không",
+                  );
+                  if (result) {
+                    handleClickDeleteUser(user.id);
+                  }
                 }}
               >
                 Delete

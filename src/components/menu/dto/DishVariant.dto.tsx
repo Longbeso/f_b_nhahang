@@ -1,5 +1,5 @@
 export type dishVariantDTO = {
-  id: number;
+  dishId: number;
   isDefault: boolean;
   name: string;
   price: number;
