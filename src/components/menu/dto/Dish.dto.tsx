@@ -1,9 +1,19 @@
-import type { dishVariantDTO } from "./DishVariant.dto";
+// import type { dishVariantDTO } from "./DishVariant.dto";
 
-export type dishDTO = {
+import type { IDishVariant } from "./DishVariant.dto";
+
+// export type dishDTO = {
+//   id: number;
+//   imageUrl: string;
+//   name: string;
+//   description: string;
+//   dishVariants: dishVariantDTO[];
+// };
+
+export interface IDish {
   id: number;
-  imageUrl: string;
   name: string;
   description: string;
-  dishVariants: dishVariantDTO[];
-};
+  imageUrl: string;
+  dishVariants: IDishVariant[];
+}

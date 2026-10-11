@@ -8,12 +8,14 @@ import App from "../App";
 import "../components/waiter/waiter.css";
 import ManageUser from "../components/admin/content/ManageUser";
 import Menu from "../components/menu/Menu";
+import Dashboard from "../components/admin/content/Dashboard";
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/app" element={<App />} />
       <Route path="/admin" element={<Admin />}>
+        <Route index path="dashboard" element={<Dashboard />}></Route>
         <Route index path="user" element={<ManageUser />}></Route>
         <Route path="menu" element={<Menu />}></Route>
       </Route>

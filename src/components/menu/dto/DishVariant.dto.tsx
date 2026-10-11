@@ -1,6 +1,6 @@
-export type dishVariantDTO = {
-  dishId: number;
-  isDefault: boolean;
+export interface IDishVariant {
+  id: number;
   name: string;
   price: number;
-};
+  isDefault: boolean;
+}

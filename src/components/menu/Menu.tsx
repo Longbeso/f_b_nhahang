@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import menuService from "../../services/MenuService";
 import Card from "./content/Card";
 import ModalCreateDish from "./content/ModalCreateDish";
-import MenuService from "../../services/MenuService";
 import type { CategoryDTO } from "./dto/Category.dto";
-import type { dishDTO } from "./dto/Dish.dto";
 import type { CreateDish } from "../../services/dto/CreateDish.dto";
-import type { CreateDishVariat } from "../../services/dto/CreateDishVariant.dto";
+import type { CreateDishVariant } from "../../services/dto/CreateDishVariant.dto";
 import "./menu.css";
+import type { IMenuCategory } from "./dto/Menu.dto";
+import ModalCreateCategory from "./content/ModalCreateCategory";
+import type { IDishVariant } from "./dto/DishVariant.dto";
 
 const Menu = () => {
-  const [dishes, setDishes] = useState([]);
   const [categories, setcategories] = useState<CategoryDTO[]>([]);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
 
-  // const [modal, setModal] = useState<boolean>(false);
-  const fetchDish = async () => {
-    const listDish = await menuService.getAllDish();
-    setDishes(listDish.data);
+  // modifier
+  const [menu, setMenu] = useState<IMenuCategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+
+  const fetchMenu = async () => {
+    const newMenu: IMenuCategory[] = await menuService.getMenu();
+    setMenu(newMenu);
   };
 
-  const fetchDishByCategoryId = async (id: number) => {
-    const listDish = await menuService.getDishByCategoryId(id);
-    setDishes(listDish.data);
+  const displayDish = () => {
+    return selectedCategory === null
+      ? menu.flatMap((cate) => cate.dishes)
+      : (menu.find((cate) => cate.id === selectedCategory)?.dishes ?? []);
+  };
+
+  const handleClickCategory = (cateId: number | null) => {
+    setSelectedCategory(cateId);
   };
 
   const fetchCategory = async () => {
@@ -31,31 +39,10 @@ const Menu = () => {
   };
 
   useEffect(() => {
-    fetchDish();
+    // fetchDish();
     fetchCategory();
+    fetchMenu();
   }, []);
-
-  // useEffect(() => {
-  //   console.log(categories);
-  // }, [categories]);
-
-  const handleClickCategory = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    categoryId: number,
-  ) => {
-    const listBtn = document.querySelectorAll(".category-btn");
-    listBtn.forEach((btn) => {
-      if (btn.classList.contains("btn-primary")) {
-        btn.classList.remove("btn-primary");
-      }
-    });
-    e.currentTarget.classList.add("btn-primary");
-    if (categoryId === 0) {
-      fetchDish();
-    } else {
-      fetchDishByCategoryId(categoryId);
-    }
-  };
 
   const handleClickShowModal = () => {
     setIsShowModal(!isShowModal);
@@ -67,61 +54,96 @@ const Menu = () => {
 
   const handleClickAddNewDish = async (
     dishData: CreateDish,
-    listDishVariant: CreateDishVariat[],
+    listDishVariant: CreateDishVariant[],
   ) => {
-    const dish = await MenuService.creatDish(dishData, listDishVariant);
+    const dish = await menuService.creatDish(dishData, listDishVariant);
     console.log("this is dish from menu.tsx", dish);
     setIsShowModal(false);
-    fetchDish();
+    fetchMenu();
   };
+
+  const handleClickDeleteDish = async (dishId: number) => {
+    const dishDeleted = await menuService.softDeleteDish(dishId);
+    console.log(dishDeleted);
+    fetchMenu();
+  };
+
+  const handleAddNewCategory = async (categoryName: string) => {
+    const newCate = await menuService.createCategory(categoryName);
+    console.log(newCate);
+    fetchMenu();
+  };
+
+  // ==> không chỉ đơn giản là tạo mà là có thể tạo hoặc chỉ update hoặc cả 2 ???
+  const handleUpdateVariant = async (
+    listDishVariant: IDishVariant[],
+    dishId: number,
+  ) => {
+    await menuService.updateDishVariant(dishId, listDishVariant);
+    fetchMenu();
+  };
+
   return (
-    <div className="menu-container">
-      <div className="menu-header container">
-        <div className="category">
-          <button
-            className="btn category-btn btn-primary"
-            onClick={(e) => {
-              handleClickCategory(e, 0);
-            }}
-          >
-            All
-          </button>
-          {categories.map((category: any) => {
-            return (
-              <button
-                className="btn category-btn"
-                onClick={(e) => {
-                  handleClickCategory(e, category.id);
-                }}
-                key={category.id}
-              >
-                {category.name}
-              </button>
-            );
-          })}
+    <>
+      <div className="menu-container">
+        <div className="menu-header container">
+          <div className="category">
+            <button
+              className={` btn category-btn ${selectedCategory === null ? "btn-primary" : ""} `}
+              onClick={() => {
+                handleClickCategory(null);
+              }}
+            >
+              All
+            </button>
+            {menu.map((category: any) => {
+              return (
+                <button
+                  key={category.id}
+                  className={`btn category-btn ${selectedCategory === category.id ? "btn-primary" : ""} `}
+                  onClick={() => {
+                    handleClickCategory(category.id);
+                  }}
+                >
+                  {category.name}
+                </button>
+              );
+            })}
+          </div>
+          <div className="modals">
+            <div className="modal-create-dish me-2">
+              <ModalCreateDish
+                isShowModal={isShowModal}
+                handleClickShowModal={handleClickShowModal}
+                handleClickCloseModal={handleClickCloseModal}
+                handleClickAddNewDish={handleClickAddNewDish}
+                categories={categories}
+              />
+            </div>
+            <div className="create-category">
+              <ModalCreateCategory
+                handleAddNewCategory={handleAddNewCategory}
+              />
+            </div>
+          </div>
         </div>
-        <div className="modal-create-dish">
-          <ModalCreateDish
-            isShowModal={isShowModal}
-            handleClickShowModal={handleClickShowModal}
-            handleClickCloseModal={handleClickCloseModal}
-            handleClickAddNewDish={handleClickAddNewDish}
-            categories={categories}
-          />
+        <div className="menu-main container">
+          <div className="card-wrapper g-3">
+            {displayDish().map((dish) => {
+              return (
+                <div className="mb-2 dish_col" key={dish.id}>
+                  <Card
+                    dish={dish}
+                    handleClickDeleteDish={handleClickDeleteDish}
+                    handleUpdateVariant={handleUpdateVariant}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-      <div className="menu-main container">
-        <div className="row">
-          {dishes.map((dish: dishDTO) => {
-            return (
-              <div className="col col-lg-3 col-6" key={dish.id}>
-                <Card dish={dish} />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

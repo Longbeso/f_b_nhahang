@@ -8,9 +8,26 @@
   border: solid 1px rgb(109, 109, 109) !important;
 }
 
+.modals {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* card food */
 .card-food {
-  min-height: 340px;
+  min-height: 478px;
+  width: 100%;
+}
+
+.dish_card_body {
+  display: flex;
+  flex-direction: column;
+}
+
+.dish-variant-edit-box {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
 }
 
 /* menu */
@@ -35,13 +52,21 @@
   margin-right: 4px;
 }
 
+.label-choose-dishDefault input {
+  margin: 0 4px;
+}
+
+.label-choose-dishDefault {
+  margin-right: 4px;
+}
+
 .delete-btn-dish-variant {
   height: 50%;
 }
 
 .list-dish-variant {
   height: 240px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .header-dish-variant {
@@ -62,6 +87,39 @@
 
 .img-preview {
   height: 100%;
-
+  color: rgb(71, 80, 67);
   object-fit: contain;
+}
+
+.dish-image {
+  margin-bottom: 10px;
+  color: rgb(71, 80, 67);
+}
+
+/* css for menu container responsive */
+
+.dish_col {
+  width: 100%;
+}
+
+/* Bước 1: khai báo thẻ cha là 1 "container" */
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  container-type: inline-size; /* theo dõi chiều rộng */
+  column-gap: clamp(8px, 1vw, 16px);
+  row-gap: clamp(8px, 1vw, 16px);
+}
+
+/* Bước 2: thẻ con dùng @container thay vì @media */
+@container (max-width: 1168px) {
+  .dish_col {
+    width: calc((100% - 2 * clamp(8px, 1vw, 16px)) / 3);
+  }
+}
+
+@container (min-width: 1169px) {
+  .dish_col {
+    width: calc((100% - 3 * clamp(8px, 1vw, 16px)) / 4);
+  }
 }

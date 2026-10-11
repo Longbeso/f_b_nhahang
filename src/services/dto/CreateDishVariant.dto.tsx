@@ -1,6 +1,6 @@
-export type CreateDishVariat = {
+export type CreateDishVariant = {
+  dishId: number;
   name: string;
   isDefault: boolean;
-  price: number;
-  dishId: number;
+  price: string;
 };

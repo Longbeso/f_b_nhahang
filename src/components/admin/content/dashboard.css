@@ -1,0 +1,53 @@
+/* .dashboard-container {
+  border: 1px black solid;
+  display: flex;
+} */
+
+.revenue-container {
+  border: 1px green solid;
+  background-color: #de8038;
+  border-radius: 12px;
+  min-height: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.target-container {
+  display: flex;
+}
+
+/* css chung */
+
+.card.target-card {
+  width: 10rem;
+  min-width: 180px;
+  background-color: color-mix(in oklab, #0f1117 20%, transparent);
+}
+
+/* .target-card {
+  border-radius: 12px;
+  overflow: hidden;
+} */
+
+div.dashboard-stat-item {
+  border: solid rgba(240, 237, 232, 0.07) 1px;
+  background-color: #181c25;
+  border-radius: 8px;
+  color: white;
+}
+
+.card-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.card:hover {
+  border: solid red 1px;
+}
+
+.charts1 {
+  border-radius: 8px;
+  border: solid rgba(240, 237, 232, 0.07) 1px;
+  background-color: #181c25;
+}

@@ -1,10 +1,12 @@
 import { Form, Button, Card, Container } from "react-bootstrap";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 import "./login.css";
 import { Bounce, toast, ToastContainer } from "react-toastify";
+import AuthContext from "./Context.auth";
 const Login = () => {
+  const { setUser } = useContext(AuthContext)!; // dấu ! bảo TypeScript "tin tôi, không null đâu" ????
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [passWord, setPassWord] = useState("");
@@ -13,13 +15,17 @@ const Login = () => {
 
     try {
       const result = await AuthService.login({ userName, passWord });
+
+      setUser(result.data.infor);
+
       localStorage.setItem("accessToken", result.data.accessToken);
       if (result.data.infor.role === "ADMIN") {
-        navigate("/admin");
+        navigate("/admin/dashboard");
       } else {
         navigate("/waiter");
       }
     } catch (err) {
+      console.log(err);
       toast.error("Mật khẩu hoặc tên đăng nhập sai !!!");
     }
   };
